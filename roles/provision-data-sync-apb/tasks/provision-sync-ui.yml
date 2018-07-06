@@ -1,0 +1,97 @@
+- name: Create data-sync-ui deployment config
+  openshift_v1_deployment_config:
+    name: data-sync-ui
+    namespace: '{{ namespace }}'
+    labels:
+      app: data-sync
+      service: data-sync-ui
+    replicas: 1
+    selector:
+      app: data-sync
+      service: data-sync-ui
+    spec_template_metadata_labels:
+      app: data-sync
+      service: data-sync-ui
+    spec_template_spec_service_account_name: '{{ proxy_serviceaccount_name }}'
+    containers:
+    - name: data-sync-ui
+      image: '{{ sync_ui_image }}:{{ sync_ui_version }}'
+      imagePullPolicy: IfNotPresent
+      # readinessProbe:
+      #   httpGet:
+      #     path: /healthz
+      #     port: "{{ sync_ui_port }}"
+      #   initialDelaySeconds: 15
+      #   timeoutSeconds: 1
+      env:
+      - name: POSTGRES_HOST
+        value: '{{ postgres_service_name }}'
+      - name: POSTGRES_PASSWORD
+        value: "{{ postgres_password}}"
+      - name: POSTGRES_USERNAME
+        value: "{{ postgres_user}}"
+      - name: POSTGRES_DATABASE
+        value: "{{ postgres_database }}"
+    - name: data-sync-ui-oauth-proxy
+      image: '{{ proxy_image }}:{{ proxy_version }}'
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: '{{ sync_ui_proxy_port }}'
+        name: public
+      args:
+      - --provider=openshift
+      - --openshift-service-account={{ proxy_serviceaccount_name }}
+      - --upstream=http://localhost:{{ sync_ui_port }}
+      - >-
+        --openshift-sar={"namespace":"{{ namespace }}","resource":"deploymentconfigs","name":"data-sync-ui","verb":"update"}
+      - --http-address=0.0.0.0:{{ sync_ui_proxy_port }}
+      - --https-address=
+      - --cookie-secret=SECRET
+
+- name: Create data-sync-ui service
+  k8s_v1_service:
+    name: data-sync-ui
+    namespace: '{{ namespace }}'
+    labels:
+      app: data-sync
+      service: data-sync-ui
+    selector:
+      app: data-sync
+      service: data-sync-ui
+    ports:
+      - name: web
+        port: 443
+        target_port: '{{ sync_ui_proxy_port }}'
+
+- name: Create data-sync-ui https route
+  openshift_v1_route:
+    annotations:
+      console.alpha.openshift.io/overview-app-route: 'true'
+    name: data-sync-ui
+    namespace: '{{ namespace }}'
+    labels:
+      app: data-sync
+      service: data-sync-ui
+    to_name: data-sync-ui
+    spec_port_target_port: web
+    tls_termination: edge
+    tls_insecure_edge_termination_policy: Redirect
+  register: app_data_sync_ui_route
+
+# Check the containers in the data-sync-ui pod and make sure they are all ready
+- name: "Wait for all data-sync-ui containers to become ready"
+  shell: oc get pods --namespace={{ namespace }} --selector="deploymentconfig=data-sync-ui" -o jsonpath='{.items[*].status.containerStatuses[?(@.ready==true)].ready}'| wc -w
+  register: aerogear_app_data_sync_ui_result
+  until: aerogear_app_data_sync_ui_result.stdout.find("2") != -1
+  retries: 30
+  delay: 10
+
+  # - name: Wait for app-data-sync-ui health endpoint to report healthy
+  # uri:
+  #   url: https://{{ data_sync_ui_route.route.spec.host }}/healthz
+  #   validate_certs: no
+  #   status_code: 200
+  # register: app_data-sync-ui_health
+  # until: app_data-sync-ui_health.status == 200
+  # retries: 30
+  # delay: 10

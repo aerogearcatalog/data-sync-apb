@@ -1,0 +1,10 @@
+---
+
+# Global constants
+sync_secret_name: "data-sync"
+proxy_serviceaccount_name: "data-sync-oauth-proxy"
+postgres_claim_name: "postgres-claim"
+postgres_service_name: "postgres-data-sync"
+sync_server_service_name: "data-sync-server"
+sync_ui_service_name: "data-sync-ui"
+encode_asb_binding: true

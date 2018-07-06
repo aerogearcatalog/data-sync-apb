@@ -1,0 +1,22 @@
+# data-sync-ui
+sync_ui_image: "docker.io/aerogear/data-sync-ui"
+sync_ui_version: "master"
+sync_ui_port: 8080
+sync_ui_proxy_port: 8081
+
+# data-sync-server
+sync_server_image: "docker.io/aerogear/data-sync-server"
+sync_server_version: "master"
+sync_server_port: 8000
+
+# Postgres values
+postgres_image: "registry.access.redhat.com/rhscl/postgresql-96-rhel7"
+postgres_version: "1"
+postgres_port: 5432
+postgres_user: "{{ POSTGRES_USER | default('user', true) }}"
+postgres_password: "{{ POSTGRES_PASSWORD | default(lookup('password', '/tmp/pass chars=ascii_letters,digits'), true) }}"
+postgres_database: "aerogear_data_sync_db"
+
+# OAuth Proxy values
+proxy_image: "docker.io/openshift/oauth-proxy"
+proxy_version: "v1.1.0"

@@ -1,0 +1,48 @@
+version: 1.0
+name: data-sync-apb
+description: Installs the Aerogear Data Sync Service
+bindable: True
+async: optional
+tags:
+  - mobile-service
+  - mobile-client-enabled
+metadata:
+  displayName: Data Sync
+  console.openshift.io/iconClass: fa fa-refresh
+  # documentationUrl: "https://docs.aerogear.org/external/apb/metrics.html"
+  providerDisplayName: "Red Hat, Inc."
+  # sdk-docs-android: "https://docs.aerogear.org/external/apb/metrics/android.html"
+  # sdk-docs-cordova: "https://docs.aerogear.org/external/apb/metrics/cordova.html"
+  # sdk-docs-ios: "https://docs.aerogear.org/external/apb/metrics/ios.html"
+  # sdk-docs-xamarin: "https://docs.aerogear.org/external/apb/metrics/xamarin.html"
+  serviceName: data-sync
+plans:
+  - name: default
+    description: This plan sets up the Data Sync Admin UI, The Data Sync Server and PostgreSQL
+    free: True
+    metadata:
+      mobileclient_bind_parameters_data:
+        - '{"name": "CLIENT_ID", "value": "metadata.name", "type": "path"}'
+    parameters: 
+      - name: POSTGRES_STORAGE_SIZE
+        required: True
+        default: 10
+        type: number
+        title: Postgres Storage Size (Gb)
+      - name: POSTGRES_USER
+        description: Username that will be used to connect to postgres ('user' will be used if blank)
+        default: user
+        type: string
+        required: False
+        title: Postgres User
+      - name: POSTGRES_PASSWORD
+        description: Password to connect to Postgres (generated if blank)
+        type: string
+        required: False
+        title: Postgres Password
+    bind_parameters:
+      - name: CLIENT_ID
+        required: True
+        title: Mobile Client ID
+        type: string
+        
