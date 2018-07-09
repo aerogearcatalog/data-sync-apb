@@ -1,0 +1,31 @@
+---
+
+- name: "Test|Check that the data sync ui is accessible"
+  uri:
+    url: "https://{{ data_sync_ui_route.route.spec.host }}"
+    return_content: yes
+    validate_certs: no
+  register: webpage
+  retries: 20
+  delay: 10
+  failed_when:
+    - webpage.status == 403
+    - '"Log in with OpenShift" not in webpage.content'
+  until: '"Log in with OpenShift" in webpage.content'
+
+- name: "Test|Check that the sync server is accessible"
+  uri:
+    url: "https://{{ data_sync_server_route.route.spec.host }}/healthz"
+    return_content: yes
+    validate_certs: no
+  register: result
+  retries: 20
+  delay: 10
+  failed_when:
+    - result.status == 503
+  until: result.status == 200
+
+- name: "Test|Check that data-sync secret exists"
+  shell: "oc get secrets -o name | grep {{ sync_secret_name }}"
+  register: sync_secret
+  failed_when: sync_secret_name not in sync_secret.stdout

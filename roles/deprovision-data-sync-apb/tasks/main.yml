@@ -1,0 +1,18 @@
+- name: Delete all data-sync resources by app label (limited to deploymentconfig,buildconfig,service,imagestream,route and pod)
+  shell: oc delete all -l app=data-sync -n '{{ namespace }}'
+
+- k8s_v1_config_map:
+    name: 'data-sync'
+    namespace: '{{ namespace }}'
+    state: absent
+
+- k8s_v1_service_account:
+    name: '{{ proxy_serviceaccount_name }}'
+    namespace: '{{ namespace }}'
+    state: absent
+
+- name: Postgres PVC
+  k8s_v1_persistent_volume_claim:
+    name: '{{ postgres_claim_name }}'
+    namespace: "{{ namespace }}"
+    state: absent

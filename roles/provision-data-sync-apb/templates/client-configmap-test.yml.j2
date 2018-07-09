@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-sync
+  namespace: {{ namespace }}
+  labels:
+    mobile: enabled
+    serviceName: data-sync
+data:
+  id: data-sync
+  type: data-sync
+  name: data-sync
+  uri: https://{{ data_sync_server_route.route.spec.host }}
