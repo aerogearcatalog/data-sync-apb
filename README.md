@@ -20,4 +20,4 @@ The test does the following:
 
 If the test ends successfully, you should see the message `Pod phase Succeeded without returning test results` in your console output.
 
-For more information about testing of APBs, check [ansible-playbook-bundle documentation](https://github.com/ansibleplaybookbundle/ansible-playbook-bundle/blob/master/docs/getting_started.md#test)
+For more information about testing of APBs, check [ansible-playbook-bundle documentation](https://github.com/ansibleplaybookbundle/ansible-playbook-bundle/blob/master/docs/getting_started.md#test).
