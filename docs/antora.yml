@@ -1,5 +1,5 @@
-name: metrics
-title: AeroGear Metrics Mobile Service
+name: data-sync
+title: AeroGear Data Sync Service
 version: 'latest'
 start_ROOT: ROOT:index.adoc
 nav:
