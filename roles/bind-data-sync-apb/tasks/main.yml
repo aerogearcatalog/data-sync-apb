@@ -1,11 +1,11 @@
-- name: Retrieve metrics route
+- name: Retrieve sync server route
   shell: "oc get configmaps/{{ sync_secret_name }} -n {{ namespace }} -o jsonpath={.data.uri}"
   register: sync_server_uri_result
 
 - set_fact:
     sync_server_uri: "{{ sync_server_uri_result.stdout }}"
 
-- name: "Create metrics bind secret yaml file"
+- name: "Create sync server bind secret yaml file"
   template:
     src: bind_secret.yml
     dest: /tmp/bind-secret.yaml

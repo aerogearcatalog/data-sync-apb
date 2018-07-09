@@ -1,4 +1,4 @@
-- name: Delete all metrics resources by app label (limited to deploymentconfig,buildconfig,service,imagestream,route and pod)
+- name: Delete all data-sync resources by app label (limited to deploymentconfig,buildconfig,service,imagestream,route and pod)
   shell: oc delete all -l app=data-sync -n '{{ namespace }}'
 
 - k8s_v1_config_map:

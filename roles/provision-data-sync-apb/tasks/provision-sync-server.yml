@@ -63,13 +63,13 @@
   register: data_sync_server_route
 
 # Create the configmap used for the client config
-- name: Create metrics configmap template
+- name: Create data-sync configmap template
   template:
     src: client-configmap.yml.j2
     dest: /tmp/client-configmap.yaml
   when: _apb_service_instance_id is defined
 
-- name: Create metrics test configmap template
+- name: Create data-sync test configmap template
   template:
     src: client-configmap-test.yml.j2
     dest: /tmp/configmap.yaml
