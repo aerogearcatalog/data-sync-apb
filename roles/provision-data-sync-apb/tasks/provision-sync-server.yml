@@ -72,7 +72,7 @@
 - name: Create data-sync test configmap template
   template:
     src: client-configmap-test.yml.j2
-    dest: /tmp/configmap.yaml
+    dest: /tmp/client-configmap.yaml
   when: _apb_service_instance_id is not defined
 
 - name: Create data-sync-server public client config map
