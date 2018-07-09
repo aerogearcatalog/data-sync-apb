@@ -11,7 +11,7 @@
     - '"No resources found." not in result.stdout'
   until: '"No resources found." in result.stdout'
 
-- name: "Test|Check that the data sync server route has been removed"
+- name: "Test|Check that the data sync ui route has been removed"
   shell: oc get route --namespace={{ namespace }} data-sync-ui 2>&1
   register: result
   retries: 30
@@ -20,7 +20,7 @@
     - '"not found" not in result.stdout'
   until: '"not found" in result.stdout'
 
-- name: "Test|Check that the data sync ui route has been removed"
+- name: "Test|Check that the data sync server route has been removed"
   shell: oc get route --namespace={{ namespace }} data-sync-server 2>&1
   register: result
   retries: 30

@@ -76,7 +76,7 @@
     spec_port_target_port: web
     tls_termination: edge
     tls_insecure_edge_termination_policy: Redirect
-  register: app_data_sync_ui_route
+  register: data_sync_ui_route
 
 # Check the containers in the data-sync-ui pod and make sure they are all ready
 - name: "Wait for all data-sync-ui containers to become ready"
