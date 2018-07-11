@@ -1,0 +1,6 @@
+---
+
+- name: "Test|Check that data-sync bind secret exists"
+  shell: "oc get secrets -o name | grep {{ sync_secret_name }}-{{ CLIENT_ID }}"
+  register: sync_secret
+  failed_when: sync_secret_name not in sync_secret.stdout

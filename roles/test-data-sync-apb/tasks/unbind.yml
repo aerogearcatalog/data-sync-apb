@@ -1,0 +1,10 @@
+---
+
+- name: "Test|Check that bind secret has been removed"
+  shell: "oc get secret --namespace={{ namespace }} {{ sync_secret_name }}-{{ CLIENT_ID }} 2>&1"
+  register: result
+  retries: 30
+  delay: 10
+  failed_when:
+    - '"not found" not in result.stdout'
+  until: '"not found" in result.stdout'

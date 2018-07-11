@@ -1,5 +1,5 @@
-- name: Delete {{ sync_secret_name }}-{{ _apb_bind_creds.clientId }} secret
+- name: Delete {{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }} secret
   k8s_v1_secret:
-    name: "{{ sync_secret_name }}-{{ _apb_bind_creds.clientId }}"
+    name: "{{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }}"
     namespace: "{{ namespace }}"
     state: absent
