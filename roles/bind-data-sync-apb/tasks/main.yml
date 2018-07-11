@@ -19,5 +19,13 @@
 - name: Encode {{ CLIENT_ID }} credentials
   asb_encode_binding:
     fields:
-      clientId: "{{ CLIENT_ID }}"
+      CLIENT_ID: "{{ CLIENT_ID }}"
   when: encode_asb_binding
+
+- name: Populate {{ CLIENT_ID }} APB bind credentials
+  set_fact:
+    _apb_bind_creds: "{{ _apb_bind_creds|default({}) | combine( {item.name: item.value} ) }}"
+  with_items:
+    - { name: CLIENT_ID, value: '{{ CLIENT_ID }}' }
+  when: not encode_asb_binding
+  no_log: yes

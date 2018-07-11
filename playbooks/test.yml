@@ -20,6 +20,14 @@
     include_role: name=provision-data-sync-apb
   - name: Test provision role
     include_role: name=test-data-sync-apb tasks_from=provision.yml
+  - name: Run bind role
+    include_role: name=bind-data-sync-apb
+  - name: Test bind role
+    include_role: name=test-data-sync-apb tasks_from=bind.yml
+  - name: Run unbind role
+    include_role: name=unbind-data-sync-apb
+  - name: Test unbind role
+    include_role: name=test-data-sync-apb tasks_from=unbind.yml
   - name: Run the deprovision role
     include_role: name=deprovision-data-sync-apb
   - name: Test deprovision role
