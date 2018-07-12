@@ -51,6 +51,8 @@
 
 - name: Create data-sync-server https route
   openshift_v1_route:
+    annotations:
+      console.alpha.openshift.io/overview-app-route: 'true'
     name: data-sync-server
     namespace: '{{ namespace }}'
     labels:
