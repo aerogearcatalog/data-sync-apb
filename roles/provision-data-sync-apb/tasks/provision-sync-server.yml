@@ -16,12 +16,12 @@
     - name: data-sync-server
       image: '{{ sync_server_image }}:{{ sync_server_version }}'
       imagePullPolicy: IfNotPresent
-      # readinessProbe:
-      #   httpGet:
-      #     path: /healthz
-      #     port: "{{ sync_server_port }}"
-      #   initialDelaySeconds: 15
-      #   timeoutSeconds: 1
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: "{{ sync_server_port }}"
+        initialDelaySeconds: 15
+        timeoutSeconds: 1
       env:
       - name: POSTGRES_HOST
         value: '{{ postgres_service_name }}'
@@ -51,6 +51,8 @@
 
 - name: Create data-sync-server https route
   openshift_v1_route:
+    annotations:
+      console.alpha.openshift.io/overview-app-route: 'true'
     name: data-sync-server
     namespace: '{{ namespace }}'
     labels:
@@ -88,13 +90,3 @@
   until: aerogear_app_data_sync_server_result.stdout.find("1") != -1
   retries: 30
   delay: 10
-
-  # - name: Wait for app-data-sync-server health endpoint to report healthy
-  # uri:
-  #   url: https://{{ data_sync_server_route.route.spec.host }}/healthz
-  #   validate_certs: no
-  #   status_code: 200
-  # register: app_data-sync-server_health
-  # until: app_data-sync-server_health.status == 200
-  # retries: 30
-  # delay: 10

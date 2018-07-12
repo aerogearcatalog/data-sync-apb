@@ -17,12 +17,12 @@
     - name: data-sync-ui
       image: '{{ sync_ui_image }}:{{ sync_ui_version }}'
       imagePullPolicy: IfNotPresent
-      # readinessProbe:
-      #   httpGet:
-      #     path: /healthz
-      #     port: "{{ sync_ui_port }}"
-      #   initialDelaySeconds: 15
-      #   timeoutSeconds: 1
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: "{{ sync_ui_port }}"
+        initialDelaySeconds: 15
+        timeoutSeconds: 1
       env:
       - name: POSTGRES_HOST
         value: '{{ postgres_service_name }}'
@@ -85,13 +85,3 @@
   until: aerogear_app_data_sync_ui_result.stdout.find("2") != -1
   retries: 30
   delay: 10
-
-  # - name: Wait for app-data-sync-ui health endpoint to report healthy
-  # uri:
-  #   url: https://{{ data_sync_ui_route.route.spec.host }}/healthz
-  #   validate_certs: no
-  #   status_code: 200
-  # register: app_data-sync-ui_health
-  # until: app_data-sync-ui_health.status == 200
-  # retries: 30
-  # delay: 10
