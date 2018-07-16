@@ -1,7 +1,7 @@
 ---
 
 # Global constants
-sync_secret_name: "data-sync"
+sync_secret_name: "sync"
 proxy_serviceaccount_name: "data-sync-oauth-proxy"
 postgres_claim_name: "postgres-claim"
 postgres_service_name: "postgres-data-sync"
