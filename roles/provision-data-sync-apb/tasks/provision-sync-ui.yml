@@ -25,7 +25,9 @@
         timeoutSeconds: 1
       env:
       - name: POSTGRES_HOST
-        value: '{{ postgres_service_name }}'
+        value: "{{ postgres_service_name }}"
+      - name: POSTGRES_PORT
+        value: "{{ postgres_port|string }}"
       - name: POSTGRES_PASSWORD
         value: "{{ postgres_password}}"
       - name: POSTGRES_USERNAME
