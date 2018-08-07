@@ -16,7 +16,7 @@
     containers:
     - name: data-sync-ui
       image: '{{ sync_ui_image }}:{{ sync_ui_version }}'
-      imagePullPolicy: IfNotPresent
+      imagePullPolicy: Always
       readinessProbe:
         httpGet:
           path: /healthz

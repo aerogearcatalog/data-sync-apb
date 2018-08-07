@@ -15,7 +15,7 @@
     containers:
     - name: data-sync-server
       image: '{{ sync_server_image }}:{{ sync_server_version }}'
-      imagePullPolicy: IfNotPresent
+      imagePullPolicy: Always
       readinessProbe:
         httpGet:
           path: /healthz
