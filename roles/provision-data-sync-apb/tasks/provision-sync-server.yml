@@ -12,6 +12,8 @@
     spec_template_metadata_labels:
       app: data-sync
       service: data-sync-server
+    spec_template_metadata_annotations:
+      org.aerogear.metrics/plain_endpoint: /metrics
     containers:
     - name: data-sync-server
       image: '{{ sync_server_image }}:{{ sync_server_version }}'
@@ -40,8 +42,6 @@
   k8s_v1_service:
     name: data-sync-server
     namespace: '{{ namespace }}'
-    annotations:
-      org.aerogear.metrics/plain_endpoint: "/metrics"
     labels:
       app: data-sync
       service: data-sync-server
