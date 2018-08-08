@@ -13,6 +13,14 @@
 - include_tasks: provision-sync-ui.yml
 - include_tasks: provision-sync-server.yml
 
+- include_role:
+    name: oc-patch-file-to-configmap
+  vars:
+    file_contents: "{{ dashboard_file_contents }}"
+    filename: "{{ dashboard_filename }}"
+    configmap: "{{ dashboards_configmap }}"
+    namespace: "{{ namespace }}"
+
 # This is currently needed until https://github.com/openshift/ansible-service-broker/issues/847 is resolved
 - name: "Make data availble for binding"
   asb_encode_binding:

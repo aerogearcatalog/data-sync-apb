@@ -20,3 +20,8 @@ postgres_database: "aerogear_data_sync_db"
 # OAuth Proxy values
 proxy_image: "docker.io/openshift/oauth-proxy"
 proxy_version: "v1.1.0"
+
+# Data Sync dashboard config
+dashboards_configmap: grafana-dashboards-configmap
+dashboard_filename: data-sync-dashboard.json # name the file will have inside the config map
+dashboard_file_contents: "{{ lookup('file','../files/data-sync-dashboard.json') }}" # Contents of the dashboard file

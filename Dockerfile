@@ -40,5 +40,6 @@ CiAgICAgICAgdHlwZTogc3RyaW5nCiAgICAgICAgCg=="
 COPY playbooks /opt/apb/actions
 COPY roles /opt/ansible/roles
 COPY vars /opt/ansible/vars
+RUN ansible-galaxy install -r /opt/apb/actions/requirements.yml -p /opt/ansible/roles
 RUN chmod -R g=u /opt/{ansible,apb}
 USER apb
