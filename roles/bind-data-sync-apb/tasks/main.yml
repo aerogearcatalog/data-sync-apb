@@ -2,8 +2,13 @@
   shell: "oc get configmaps/{{ sync_secret_name }} -n {{ namespace }} -o jsonpath={.data.uri}"
   register: sync_server_uri_result
 
+- name: Generate client id
+  shell: tr -d -c "a-zA-Z0-9" < /dev/urandom | head -c 20
+  register: generated_client_id
+
 - set_fact:
     sync_server_uri: "{{ sync_server_uri_result.stdout }}"
+    GENERATED_CLIENT_ID: "{{ generated_client_id.stdout }}"
 
 - name: "Create sync server bind secret yaml file"
   template:
