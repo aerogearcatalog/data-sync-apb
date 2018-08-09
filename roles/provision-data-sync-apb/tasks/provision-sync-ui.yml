@@ -54,8 +54,6 @@
   k8s_v1_service:
     name: data-sync-ui
     namespace: '{{ namespace }}'
-    annotations:
-      org.aerogear.metrics/plain_endpoint: "/metrics"
     labels:
       app: data-sync
       service: data-sync-ui
