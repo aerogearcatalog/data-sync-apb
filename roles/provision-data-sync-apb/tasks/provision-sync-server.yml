@@ -1,3 +1,34 @@
+- name: Create data-sync-server service
+  k8s_v1_service:
+    name: data-sync-server
+    namespace: '{{ namespace }}'
+    labels:
+      app: data-sync
+      service: data-sync-server
+    selector:
+      app: data-sync
+      service: data-sync-server
+    ports:
+      - name: web
+        port: 443
+        target_port: '{{ sync_server_port }}'
+
+- name: Create data-sync-server https route
+  openshift_v1_route:
+    annotations:
+      console.alpha.openshift.io/overview-app-route: 'true'
+    name: data-sync-server
+    namespace: '{{ namespace }}'
+    labels:
+      app: data-sync
+      service: data-sync-server
+    to_name: data-sync-server
+    spec_port_target_port: web
+    tls_termination: edge
+    tls_insecure_edge_termination_policy: Redirect
+  register: data_sync_server_route
+
+
 - name: Create data-sync-server deployment config
   openshift_v1_deployment_config:
     name: data-sync-server
@@ -38,38 +69,10 @@
         value: "{{ postgres_user}}"
       - name: POSTGRES_DATABASE
         value: "{{ postgres_database }}"
+      - name: GRAPHIQL_SUBS_ENDPOINT
+        value: "wss://{{ data_sync_server_route.route.spec.host }}/subscriptions"
       # - name: HTTP_PORT
       #   value: "{{ sync_server_port }}"
-
-- name: Create data-sync-server service
-  k8s_v1_service:
-    name: data-sync-server
-    namespace: '{{ namespace }}'
-    labels:
-      app: data-sync
-      service: data-sync-server
-    selector:
-      app: data-sync
-      service: data-sync-server
-    ports:
-      - name: web
-        port: 443
-        target_port: '{{ sync_server_port }}'
-
-- name: Create data-sync-server https route
-  openshift_v1_route:
-    annotations:
-      console.alpha.openshift.io/overview-app-route: 'true'
-    name: data-sync-server
-    namespace: '{{ namespace }}'
-    labels:
-      app: data-sync
-      service: data-sync-server
-    to_name: data-sync-server
-    spec_port_target_port: web
-    tls_termination: edge
-    tls_insecure_edge_termination_policy: Redirect
-  register: data_sync_server_route
 
 # Create the configmap used for the client config
 - name: Create data-sync configmap template
