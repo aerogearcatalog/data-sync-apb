@@ -172,7 +172,7 @@
       "targets": [
         {
           "alias": "",
-          "expr": "sum(nodejs_heap_size_total_bytes{service=\"data-sync-server\"} + nodejs_heap_size_used_bytes{service=\"data-sync-server\"})",
+          "expr": "sum(process_resident_memory_bytes{service=\"data-sync-server\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
