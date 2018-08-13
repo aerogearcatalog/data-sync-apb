@@ -60,7 +60,7 @@
     - '"not found" not in result.stdout'
   until: '"not found" in result.stdout'
   with_items:
-    - data-sync
+    - '{{ sync_configmap_name }}'
 
 - name: "Test|Check that all persistent volume claims have been removed"
   shell: oc get pvc --namespace={{ namespace }} {{ item }} 2>&1
