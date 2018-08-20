@@ -69,8 +69,6 @@
         value: "{{ postgres_user}}"
       - name: POSTGRES_DATABASE
         value: "{{ postgres_database }}"
-      - name: GRAPHIQL_SUBS_ENDPOINT
-        value: "wss://{{ data_sync_server_route.route.spec.host }}/subscriptions"
       # - name: HTTP_PORT
       #   value: "{{ sync_server_port }}"
 
