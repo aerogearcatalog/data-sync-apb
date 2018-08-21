@@ -10,8 +10,8 @@ sync_server_version: "master"
 sync_server_port: 8000
 
 # Postgres values
-postgres_image: "registry.access.redhat.com/rhscl/postgresql-96-rhel7"
-postgres_version: "1"
+postgres_image: "docker.io/centos/postgresql-96-centos7"
+postgres_version: "9.6"
 postgres_port: 5432
 postgres_user: "{{ POSTGRES_USER | default('user', true) }}"
 postgres_password: "{{ POSTGRES_PASSWORD | default(lookup('password', '/tmp/pass chars=ascii_letters,digits'), true) }}"
