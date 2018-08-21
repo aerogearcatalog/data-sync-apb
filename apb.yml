@@ -19,7 +19,7 @@ metadata:
   dependencies:
     - "docker.io/aerogear/data-sync-ui"
     - "docker.io/aerogear/data-sync-server"
-    - "docker.io/openshift/oauth-proxy":v1.1.0
+    - "docker.io/openshift/oauth-proxy:v1.1.0"
     - "docker.io/centos/postgresql-96-centos7:9.6"
 plans:
   - name: default
