@@ -16,6 +16,11 @@ metadata:
   # sdk-docs-ios: "https://docs.aerogear.org/external/apb/metrics/ios.html"
   # sdk-docs-xamarin: "https://docs.aerogear.org/external/apb/metrics/xamarin.html"
   serviceName: data-sync
+  dependencies:
+    - "docker.io/aerogear/data-sync-ui"
+    - "docker.io/aerogear/data-sync-server"
+    - "docker.io/openshift/oauth-proxy:v1.1.0"
+    - "docker.io/centos/postgresql-96-centos7:9.6"
 plans:
   - name: default
     description: This plan sets up the Data Sync Admin UI, The Data Sync Server and PostgreSQL
