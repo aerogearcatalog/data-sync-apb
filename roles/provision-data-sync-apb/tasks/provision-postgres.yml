@@ -6,7 +6,7 @@
       app: data-sync
       service: data-sync-server
     access_modes:
-      - ReadWriteMany
+      - ReadWriteOnce
     resources_requests:
       storage: '{{ POSTGRES_STORAGE_SIZE }}Gi'
     state: present
