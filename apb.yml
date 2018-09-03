@@ -9,11 +9,11 @@ tags:
 metadata:
   displayName: Data Sync
   console.openshift.io/iconClass: fa fa-refresh
-  # documentationUrl: "https://docs.aerogear.org/external/apb/metrics.html"
+  documentationUrl: "https://docs.aerogear.org/external/apb/data-sync.html"
   providerDisplayName: "Red Hat, Inc."
-  # sdk-docs-android: "https://docs.aerogear.org/external/apb/metrics/android.html"
+  sdk-docs-android: "https://docs.aerogear.org/external/apb/sync/android.html"
   # sdk-docs-cordova: "https://docs.aerogear.org/external/apb/metrics/cordova.html"
-  # sdk-docs-ios: "https://docs.aerogear.org/external/apb/metrics/ios.html"
+  sdk-docs-ios: "https://docs.aerogear.org/external/apb/sync/ios.html"
   # sdk-docs-xamarin: "https://docs.aerogear.org/external/apb/metrics/xamarin.html"
   serviceName: data-sync
   dependencies:
