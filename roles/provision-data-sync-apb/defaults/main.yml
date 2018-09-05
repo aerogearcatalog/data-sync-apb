@@ -27,5 +27,5 @@ dashboard_filename: data-sync-dashboard.json # name the file will have inside th
 dashboard_file_contents: "{{ lookup('file','../files/data-sync-dashboard.json') }}" # Contents of the dashboard file
 
 # Security complexity limits
-complexity_limit: "{{ COMPLEXITY_LIMIT | default(10000) }}"
-query_depth_limit: "{{ QUERY_DEPTH_LIMIT | default(20) }}"
+complexity_limit: "{{ COMPLEXITY_LIMIT }}"
+query_depth_limit: "{{ QUERY_DEPTH_LIMIT }}"
