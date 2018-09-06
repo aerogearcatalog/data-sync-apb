@@ -69,6 +69,10 @@
         value: "{{ postgres_user}}"
       - name: POSTGRES_DATABASE
         value: "{{ postgres_database }}"
+      - name: QUERY_DEPTH_LIMIT
+        value: "{{ query_depth_limit|string }}"
+      - name: COMPLEXITY_LIMIT
+        value: "{{ complexity_limit|string }}"
       # - name: HTTP_PORT
       #   value: "{{ sync_server_port }}"
 

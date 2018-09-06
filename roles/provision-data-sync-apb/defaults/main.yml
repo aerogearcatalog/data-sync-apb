@@ -25,3 +25,7 @@ proxy_version: "v1.1.0"
 dashboards_configmap: grafana-dashboards-configmap
 dashboard_filename: data-sync-dashboard.json # name the file will have inside the config map
 dashboard_file_contents: "{{ lookup('file','../files/data-sync-dashboard.json') }}" # Contents of the dashboard file
+
+# Security complexity limits
+complexity_limit: "{{ COMPLEXITY_LIMIT }}"
+query_depth_limit: "{{ QUERY_DEPTH_LIMIT }}"

@@ -45,6 +45,18 @@ plans:
         type: string
         required: False
         title: Postgres Password
+      - name: QUERY_DEPTH_LIMIT
+        description: Limit the complexity of the queries solely by their depth.
+        type: number
+        required: False
+        title: Query depth limit
+        default: 20
+      - name: COMPLEXITY_LIMIT
+        description: Limit the complexity of the queries based on the data.
+        type: number
+        required: False
+        title: Query complexity limit
+        default: 10000
     bind_parameters:
       - name: CLIENT_ID
         required: True
