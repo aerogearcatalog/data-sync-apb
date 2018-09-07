@@ -57,6 +57,11 @@ plans:
         required: False
         title: Query complexity limit
         default: 10000
+      - name: PROVISION_EXAMPLE
+        title: Provision example solution (Memeolist app)?
+        default: true
+        type: boolean
+        display_type: checkbox
     bind_parameters:
       - name: CLIENT_ID
         required: True
