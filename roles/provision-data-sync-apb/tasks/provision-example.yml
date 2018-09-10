@@ -1,9 +1,9 @@
 - name: Getting Postgres' pod name
-  shell: oc get pods --selector=deploymentconfig={{ postgres_service_name }} -o jsonpath='{.items[0].metadata.name}'
+  shell: oc get pods --selector=deploymentconfig={{ postgres_service_name }} -o jsonpath='{.items[0].metadata.name}' -n={{ namespace }}
   register: postgres_pod_name_output
 
 - name: Getting Data Sync Server's pod name
-  shell: oc get pods --selector=deploymentconfig={{ sync_server_service_name }} -o jsonpath='{.items[0].metadata.name}'
+  shell: oc get pods --selector=deploymentconfig={{ sync_server_service_name }} -o jsonpath='{.items[0].metadata.name}' -n={{ namespace }}
   register: server_pod_name_output
 
 - set_fact:
@@ -11,28 +11,28 @@
     server_pod_name: "{{ server_pod_name_output.stdout }}"
 
 - name: Add permisssion to user to create tables in Postgres
-  shell: oc exec {{ postgres_pod_name }} -- bash -c 'psql -U postgres -d aerogear_data_sync_db -c "alter user \"user\" createdb" '
+  shell: oc exec {{ postgres_pod_name }} -n={{ namespace }} -- bash -c 'psql -U postgres -d aerogear_data_sync_db -c "alter user \"user\" createdb" '
 
 - name: Create database memeolist_db
-  shell: oc exec {{ postgres_pod_name }} -- bash -c 'psql -U {{ postgres_user }} aerogear_data_sync_db -c "create database memeolist_db" '
+  shell: oc exec {{ postgres_pod_name }} -n={{ namespace }} -- bash -c 'psql -U {{ postgres_user }} aerogear_data_sync_db -c "create database memeolist_db" '
 
 - name: Get memeolist.sql file from Data Sync Server pod
-  shell: oc cp {{ namespace }}/{{ server_pod_name }}:/opt/app-root/src/examples/memeolist.tables.sql /tmp
+  shell: oc cp {{ namespace }}/{{ server_pod_name }}:/opt/app-root/src/examples/memeolist.tables.sql /tmp -n={{ namespace }}
 
 - name: Copy memeolist.tables.sql file to Postgres pod
-  shell: oc cp /tmp/memeolist.tables.sql {{ namespace }}/{{ postgres_pod_name }}:/tmp
+  shell: oc cp /tmp/memeolist.tables.sql {{ namespace }}/{{ postgres_pod_name }}:/tmp -n={{ namespace }}
 
 - name: Execute memeolist.tables.sql file
-  shell: oc exec {{ postgres_pod_name }} -- bash -c 'psql -U {{ postgres_user }} memeolist_db -f /tmp/memeolist.tables.sql'
+  shell: oc exec {{ postgres_pod_name }} -n={{ namespace }} -- bash -c 'psql -U {{ postgres_user }} memeolist_db -f /tmp/memeolist.tables.sql'
 
 - name: Delete sql file from Postgres pod temporary folder
-  shell: oc exec {{ postgres_pod_name }} -- bash -c 'rm /tmp/memeolist.tables.sql'
+  shell: oc exec {{ postgres_pod_name }} -n={{ namespace }} -- bash -c 'rm /tmp/memeolist.tables.sql'
 
 - name: Copy source files from Data Sync server pod to its temporary folder
-  shell: oc exec {{ server_pod_name }} -- bash -c 'cp -r /opt/app-root/src/ /tmp 2>/dev/null || true'
+  shell: oc exec {{ server_pod_name }} -n={{ namespace }} -- bash -c 'cp -r /opt/app-root/src/ /tmp 2>/dev/null || true' -n={{ namespace }}
 
 - name: Copy memeolist-example-postgres.js from Data Sync server pod modify it
-  shell: oc cp {{ namespace }}/{{ server_pod_name }}:/tmp/src/sequelize/seeders/memeolist-example-postgres.js /tmp
+  shell: oc cp {{ namespace }}/{{ server_pod_name }}:/tmp/src/sequelize/seeders/memeolist-example-postgres.js /tmp -n={{ namespace }}
 
 - name: Replace datasource credentials in memeolist-example-postgres.js
   lineinfile:
@@ -43,20 +43,20 @@
     - { regexp: '"user":', line: '"user": "{{ postgres_user }}",' }
     - { regexp: '"password":', line: '"password": "{{ postgres_password }}",' }
     - { regexp: '"database":', line: '"database": "memeolist_db",' }
-    - { regexp: '"host":', line: '"host": "{{ postgres_database }}",' }
+    - { regexp: '"host":', line: '"host": "{{ postgres_service_name }}",' }
     - { regexp: '"port":', line: '"port": "5432",' }
 
 - name: Copy modified memeolist-example-postgres.js to Data Sync server pod temporary folder
-  shell: oc cp /tmp/memeolist-example-postgres.js {{ namespace }}/{{ server_pod_name }}:/tmp/src/sequelize/seeders/memeolist-example-postgres.js
+  shell: oc cp /tmp/memeolist-example-postgres.js {{ namespace }}/{{ server_pod_name }}:/tmp/src/sequelize/seeders/memeolist-example-postgres.js -n={{ namespace }}
 
 - name: Run sequelize to seed the DBs with Memeolist schemas, resolvers etc.
-  shell: oc exec {{ server_pod_name }} -- bash -c 'cd /tmp/src && FORCE_DROP=true node ./scripts/sync_models && sequelize db:seed --seed memeolist-example-postgres.js'
+  shell: oc exec {{ server_pod_name }} -n={{ namespace }} -- bash -c 'cd /tmp/src && FORCE_DROP=true node ./scripts/sync_models && sequelize db:seed --seed memeolist-example-postgres.js'
 
 - name: Remove source files from Data Sync Server pod temporary folder
-  shell: oc exec {{ server_pod_name }} -- bash -c 'rm -rf /tmp/src/'
+  shell: oc exec {{ server_pod_name }} -n={{ namespace }} -- bash -c 'rm -rf /tmp/src/'
 
 - name: Scale Data Sync Server pod down & up so new schema is loaded
-  shell: oc scale dc/{{ sync_server_service_name }} --replicas=0 && oc scale dc/{{ sync_server_service_name }} --replicas=1
+  shell: oc scale dc/{{ sync_server_service_name }} --replicas=0 -n={{ namespace }} && oc scale dc/{{ sync_server_service_name }} --replicas=1 -n={{ namespace }}
 
 - name: Wait for data-sync-server pod to become ready again
   shell: oc get pods --namespace={{ namespace }} --selector="deploymentconfig=data-sync-server" -o jsonpath='{.items[*].status.containerStatuses[?(@.ready==true)].ready}'| wc -w
