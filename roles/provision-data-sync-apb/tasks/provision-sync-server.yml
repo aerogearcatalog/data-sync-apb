@@ -28,6 +28,20 @@
     tls_insecure_edge_termination_policy: Redirect
   register: data_sync_server_route
 
+- name: "Create ImageStream with tag {{ sync_server_version }} for Data Sync Server image"
+  openshift_v1_image_stream:
+    name: "data-sync-server"
+    namespace: "{{ namespace }}"
+    labels:
+      app: "data-sync"
+    lookup_policy_local: False
+    tags:
+      - name: "{{ sync_server_version }}"
+        from:
+          kind: DockerImage
+          name: "{{ sync_server_image }}:{{ sync_server_version }}"
+        importPolicy:
+          scheduled: true
 
 - name: Create data-sync-server deployment config
   openshift_v1_deployment_config:
@@ -45,6 +59,17 @@
       service: data-sync-server
     spec_template_metadata_annotations:
       org.aerogear.metrics/plain_endpoint: /metrics
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - "data-sync-server"
+        from:
+          kind: ImageStreamTag
+          name: "data-sync-server:{{ sync_server_version }}"
+          namespace: "{{ namespace }}"
+      type: ImageChange
+    - type: ConfigChange
     containers:
     - name: data-sync-server
       image: '{{ sync_server_image }}:{{ sync_server_version }}'
