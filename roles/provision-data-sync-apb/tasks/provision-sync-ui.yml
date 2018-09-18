@@ -1,3 +1,18 @@
+- name: "Create ImageStream with tag {{ sync_server_version }} for Data Sync UI image"
+  openshift_v1_image_stream:
+    name: "data-sync-ui"
+    namespace: "{{ namespace }}"
+    labels:
+      app: "data-sync"
+    lookup_policy_local: False
+    tags:
+      - name: "{{ sync_server_version }}"
+        from:
+          kind: DockerImage
+          name: "{{ sync_ui_image }}:{{ sync_server_version }}"
+        importPolicy:
+          scheduled: true
+
 - name: Create data-sync-ui deployment config
   openshift_v1_deployment_config:
     name: data-sync-ui
@@ -13,6 +28,17 @@
       app: data-sync
       service: data-sync-ui
     spec_template_spec_service_account_name: '{{ proxy_serviceaccount_name }}'
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - "data-sync-ui"
+        from:
+          kind: ImageStreamTag
+          name: "data-sync-ui:{{ sync_server_version }}"
+          namespace: "{{ namespace }}"
+      type: ImageChange
+    - type: ConfigChange
     containers:
     - name: data-sync-ui
       image: '{{ sync_ui_image }}:{{ sync_ui_version }}'
