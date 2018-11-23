@@ -127,3 +127,11 @@
   until: aerogear_app_data_sync_server_result.stdout.find("1") != -1
   retries: 30
   delay: 10
+
+- name: Populate APB provision credentials
+  set_fact:
+    _apb_provision_creds: "{{ _apb_provision_creds|default({}) | combine( {item.name: item.value} ) }}"
+  with_items:
+    - {name: sync_endpoint, value: "https://{{ data_sync_server_route.route.spec.host }}/graphql"}
+  when: not encode_asb_binding
+  no_log: yes
