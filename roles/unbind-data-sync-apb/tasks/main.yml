@@ -3,3 +3,13 @@
     name: "{{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }}"
     namespace: "{{ namespace }}"
     state: absent
+
+# Remove annotation from mobile client 
+- set_fact:
+    SYNC_ENDPOINT_ANNOTATION: "org.aerogear.binding.{{ _apb_bind_creds.SYNC_INSTANCE_NAME }}/sync_endpoint"
+
+- name: Remove annotations from client {{ _apb_bind_creds.CLIENT_ID }}
+  shell: "oc annotate mobileclient {{ _apb_bind_creds.CLIENT_ID }} {{ item }}- -n {{ namespace }}"
+  ignore_errors: yes
+  with_items:
+    - "{{ SYNC_ENDPOINT_ANNOTATION }}"

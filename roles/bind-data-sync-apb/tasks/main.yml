@@ -16,10 +16,28 @@
 - name: "Delete binding secret template file"
   file: path=/tmp/bind-secret.yaml state=absent
 
+# Annotate the mobile client
+- name: Get datasync service instance name
+  shell: oc get serviceinstances -n {{ namespace }} -o json | jq '.items[] | select(.spec.externalID=="{{ _apb_service_instance_id }}") | .metadata.name'  | cut -f2 -d'"'
+  register: datasync_si_name
+
+- set_fact:
+    SYNC_INSTANCE_NAME: "{{ datasync_si_name.stdout }}"
+
+- set_fact:
+    SYNC_ENDPOINT: "org.aerogear.binding.{{ SYNC_INSTANCE_NAME }}/sync_endpoint"
+
+- name: Annotate client {{ CLIENT_ID }}
+  shell: 'oc annotate mobileclient {{ CLIENT_ID }} {{ item }} --overwrite=true -n {{ namespace }}'
+  ignore_errors: yes
+  with_items:
+    - "{{ SYNC_ENDPOINT }}='{\"label\": \"Data Sync Endpoint\", \"value\": \"{{ _apb_provision_creds.sync_endpoint }}\", \"type\": \"href\"}'"
+
 - name: Encode {{ CLIENT_ID }} credentials
   asb_encode_binding:
     fields:
       CLIENT_ID: "{{ CLIENT_ID }}"
+      SYNC_INSTANCE_NAME: "{{ SYNC_INSTANCE_NAME }}"
   when: encode_asb_binding
 
 - name: Populate {{ CLIENT_ID }} APB bind credentials
@@ -27,5 +45,6 @@
     _apb_bind_creds: "{{ _apb_bind_creds|default({}) | combine( {item.name: item.value} ) }}"
   with_items:
     - { name: CLIENT_ID, value: '{{ CLIENT_ID }}' }
+    - { name: SYNC_INSTANCE_NAME, value: '{{ SYNC_INSTANCE_NAME }}' }
   when: not encode_asb_binding
   no_log: yes
