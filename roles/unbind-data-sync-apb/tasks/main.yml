@@ -1,9 +1,3 @@
-- name: Delete {{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }} secret
-  k8s_v1_secret:
-    name: "{{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }}"
-    namespace: "{{ namespace }}"
-    state: absent
-
 # Remove annotation from mobile client 
 - set_fact:
     SYNC_ENDPOINT_ANNOTATION: "org.aerogear.binding.{{ _apb_bind_creds.SYNC_INSTANCE_NAME }}/sync_endpoint"
@@ -13,3 +7,9 @@
   ignore_errors: yes
   with_items:
     - "{{ SYNC_ENDPOINT_ANNOTATION }}"
+
+- name: Delete {{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }} secret
+  k8s_v1_secret:
+    name: "{{ sync_secret_name }}-{{ _apb_bind_creds.CLIENT_ID }}"
+    namespace: "{{ namespace }}"
+    state: absent
