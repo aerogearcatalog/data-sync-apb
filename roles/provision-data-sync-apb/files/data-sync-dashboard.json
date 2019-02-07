@@ -60,7 +60,7 @@
       "gauge": {
         "maxValue": 2067000000,
         "minValue": 0,
-        "show": true,
+        "show": false,
         "thresholdLabels": false,
         "thresholdMarkers": false
       },
@@ -108,7 +108,7 @@
       "tableColumn": "Value",
       "targets": [
         {
-          "expr": "sum(process_resident_memory_bytes{service=\"data-sync-server\"})",
+          "expr": "sum(process_resident_memory_bytes{app=\"nodejs-ex\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -121,7 +121,7 @@
       "timeFrom": "5s",
       "title": "Current Memory Usage",
       "type": "singlestat",
-      "valueFontSize": "50%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -137,7 +137,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "fill": 0,
+      "fill": 2,
       "gridPos": {
         "h": 7,
         "w": 20,
@@ -179,7 +179,7 @@
       "targets": [
         {
           "alias": "",
-          "expr": "avg(process_resident_memory_bytes{service=\"data-sync-server\"})",
+          "expr": "avg(process_resident_memory_bytes{app=\"nodejs-ex\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -187,10 +187,10 @@
           "refId": "A"
         },
         {
-          "expr": "process_resident_memory_bytes{service=\"data-sync-server\"}",
+          "expr": "process_resident_memory_bytes{app=\"nodejs-ex\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{ kubernetes_pod_name }}",
+          "legendFormat": "Pod {{ kubernetes_pod_name }}",
           "refId": "B"
         }
       ],
@@ -229,7 +229,11 @@
           "min": null,
           "show": false
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "cacheTimeout": null,
@@ -295,7 +299,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(process_cpu_user_seconds_total{service=\"data-sync-server\"}[30s]) * 100)",
+          "expr": "sum(rate(process_cpu_user_seconds_total{app=\"nodejs-ex\"}[30s]) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -321,7 +325,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "fill": 0,
+      "fill": 2,
       "gridPos": {
         "h": 7,
         "w": 20,
@@ -362,7 +366,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(rate(process_cpu_user_seconds_total{service=\"data-sync-server\"}[30s]) * 100)",
+          "expr": "avg(rate(process_cpu_user_seconds_total{app=\"nodejs-ex\"}[30s]) * 100)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -371,10 +375,10 @@
           "refId": "A"
         },
         {
-          "expr": "rate(process_cpu_user_seconds_total{service=\"data-sync-server\"}[30s]) * 100",
+          "expr": "rate(process_cpu_user_seconds_total{app=\"nodejs-ex\"}[30s]) * 100",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{ kubernetes_pod_name }}",
+          "legendFormat": "Pod {{ kubernetes_pod_name }}",
           "refId": "B"
         }
       ],
@@ -413,11 +417,15 @@
           "min": null,
           "show": false
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
@@ -443,13 +451,13 @@
         "total": false,
         "values": false
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
       "percentage": false,
       "pointradius": 5,
-      "points": true,
+      "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -457,7 +465,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(requests_resolved{operation_type=\"query\", service=\"data-sync-server\"})",
+          "expr": "sum(requests_resolved{operation_type=\"query\", app=\"nodejs-ex\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -466,7 +474,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(requests_resolved{operation_type=\"mutation\", service=\"data-sync-server\"})",
+          "expr": "sum(requests_resolved{operation_type=\"mutation\", app=\"nodejs-ex\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -510,16 +518,20 @@
           "min": null,
           "show": false
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
       "description": "Resolver response time in milliseconds",
-      "fill": 1,
+      "fill": 2,
       "gridPos": {
         "h": 6,
         "w": 7,
@@ -540,13 +552,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
       "percentage": false,
       "pointradius": 5,
-      "points": true,
+      "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -554,7 +566,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(resolver_timing_ms_sum{operation_type=\"query\", service=\"data-sync-server\"} / resolver_timing_ms_count{operation_type=\"query\", service=\"data-sync-server\"})",
+          "expr": "avg(resolver_timing_ms_sum{operation_type=\"query\", app=\"nodejs-ex\"} / resolver_timing_ms_count{operation_type=\"query\", app=\"nodejs-ex\"})",
           "format": "time_series",
           "instant": false,
           "interval": "1s",
@@ -563,7 +575,7 @@
           "refId": "A"
         },
         {
-          "expr": "avg(resolver_timing_ms_sum{operation_type=\"mutation\", service=\"data-sync-server\"} / resolver_timing_ms_count{operation_type=\"mutation\", service=\"data-sync-server\"})",
+          "expr": "avg(resolver_timing_ms_sum{operation_type=\"mutation\", app=\"nodejs-ex\"} / resolver_timing_ms_count{operation_type=\"mutation\", app=\"nodejs-ex\"})",
           "format": "time_series",
           "instant": false,
           "interval": "1s",
@@ -607,7 +619,11 @@
           "min": null,
           "show": false
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
@@ -651,7 +667,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(server_response_ms_sum{request_type=\"POST\", service=\"data-sync-server\"} / server_response_ms_count{request_type=\"POST\", service=\"data-sync-server\"})",
+          "expr": "avg(server_response_ms_sum{request_type=\"POST\", app=\"nodejs-ex\"} / server_response_ms_count{request_type=\"POST\", app=\"nodejs-ex\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -660,7 +676,7 @@
           "refId": "A"
         },
         {
-          "expr": "avg(server_response_ms_sum{request_type=\"GET\", service=\"data-sync-server\"} / server_response_ms_count{request_type=\"GET\", service=\"data-sync-server\"})",
+          "expr": "avg(server_response_ms_sum{request_type=\"GET\", app=\"nodejs-ex\"} / server_response_ms_count{request_type=\"GET\", app=\"nodejs-ex\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "GET",
@@ -702,9 +718,306 @@
           "min": null,
           "show": false
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 2,
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 32,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(requests_resolved{app=\"nodejs-ex\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Operations",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(conflicts{app=\"nodejs-ex\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Conflicts",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Operations vs Conflicts",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 2,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 31
+      },
+      "id": 28,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "All Operation Types",
+          "fill": 2,
+          "linewidth": 3
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(conflicts{app=\"nodejs-ex\"}) by (operation_type)",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{operation_type}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(conflicts{app=\"nodejs-ex\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "All Operation Types",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Conflicts over time per operation type",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 2,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 31
+      },
+      "id": 30,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "All Operation Types",
+          "fill": 3
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(conflicts{app=\"nodejs-ex\"}) by (name)",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(conflicts{app=\"nodejs-ex\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "All Operation Types",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Conflicts over time per operation",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
+  "refresh": false,
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
